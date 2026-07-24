@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  ageConfirmed Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  username     String?  @unique
+  displayName  String?
+  bio          String?
+  location     String?
+  updatedAt    DateTime @updatedAt
+
+  reviews         Review[]
+  reviewReactions ReviewReaction[]
+  reviewReports   ReviewReport[]
+  scans           LabelScan[]
+}
+
+model Strain {
+  id           Int      @id @default(autoincrement())
+  name         String
+  manufacturer String?
+  thc          String?
+  cbd          String?
+  genetics     String?
+  terpenes     String?
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+
+  reviews Review[]
+  scans   LabelScan[]
+}
+
+model Review {
+  id       Int @id @default(autoincrement())
+  userId   Int
+  strainId Int
+
+  rating    Int
+  effect    Int?
+  taste     Int?
+  strength  Int?
+  tolerance Int?
+  comment   String?
+
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  strain Strain @relation(fields: [strainId], references: [id])
+
+  reactions ReviewReaction[]
+  reports   ReviewReport[]
+}
+
+model ReviewReaction {
+  id       Int    @id @default(autoincrement())
+  userId   Int
+  reviewId Int
+  value    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reviewId])
+  @@index([reviewId])
+}
+
+model ReviewReport {
+  id       Int     @id @default(autoincrement())
+  userId   Int
+  reviewId Int
+  reason   String?
+
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reviewId])
+  @@index([reviewId])
+}
+
+model LabelScan {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  strainId      Int?
+  imageUrl      String?
+  extractedText String?
+  detectedName  String?
+  detectedMaker String?
+  detectedThc   String?
+  detectedCbd   String?
+  status        String   @default("pending")
+  createdAt     DateTime @default(now())
+
+  user   User    @relation(fields: [userId], references: [id])
+  strain Strain? @relation(fields: [strainId], references: [id])
+}
