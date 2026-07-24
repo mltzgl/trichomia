@@ -52,7 +52,7 @@ export default function ImageSelector({ onSelect }: any) {
 
       {box && (
         <div
-          className="absolute border-2 border-emerald-400 bg-emerald-400/20"
+          className="absolute border-2 border-gold bg-gold/20"
           style={{
             left: box.x,
             top: box.y,

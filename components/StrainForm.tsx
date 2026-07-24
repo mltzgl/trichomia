@@ -93,7 +93,7 @@ export default function StrainForm({ initialData = {} }: { initialData?: any }) 
   }
 
   return (
-    <form onSubmit={save} className="rounded-[2rem] border border-zinc-800 bg-zinc-900 p-6">
+    <form onSubmit={save} className="rounded-[2rem] border border-cream/10 bg-panel p-6">
       <div className="grid gap-5">
         <Input label="Sortenname" value={form.name} onChange={(v) => setField("name", v)} placeholder="z. B. HUALA 25/1 CA ALM" />
         <Input label="Hersteller / Anbieter" value={form.manufacturer} onChange={(v) => setField("manufacturer", v)} placeholder="z. B. HUALA, Sibanax, Demecan" />
@@ -102,11 +102,11 @@ export default function StrainForm({ initialData = {} }: { initialData?: any }) 
         <Slider label="CBD" value={form.cbd} max={25} step={0.1} onChange={(v) => setField("cbd", v)} />
 
         <div>
-          <label className="text-sm text-zinc-400">Genetik</label>
+          <label className="text-sm text-moss">Genetik</label>
           <select
             value={form.genetics}
             onChange={(e) => setField("genetics", e.target.value)}
-            className="mt-2 w-full rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+            className="mt-2 w-full rounded-xl border border-cream/10 bg-night p-4"
           >
             <option value="">Nicht angegeben</option>
             {geneticsOptions.filter(Boolean).map((option) => (
@@ -116,7 +116,7 @@ export default function StrainForm({ initialData = {} }: { initialData?: any }) 
         </div>
 
         <div>
-          <label className="text-sm text-zinc-400">Terpene</label>
+          <label className="text-sm text-moss">Terpene</label>
           <div className="mt-3 flex flex-wrap gap-2">
             {terpeneOptions.map((terpene) => {
               const active = form.terpenes.includes(terpene);
@@ -126,7 +126,7 @@ export default function StrainForm({ initialData = {} }: { initialData?: any }) 
                   type="button"
                   onClick={() => toggleTerpene(terpene)}
                   className={`rounded-full px-4 py-2 text-sm ${
-                    active ? "bg-emerald-600 text-white" : "bg-zinc-950 text-zinc-400"
+                    active ? "bg-forest text-ivory" : "bg-night text-moss"
                   }`}
                 >
                   {terpene}
@@ -137,21 +137,21 @@ export default function StrainForm({ initialData = {} }: { initialData?: any }) 
         </div>
 
         <div>
-          <label className="text-sm text-zinc-400">Beschreibung / Merkmale</label>
+          <label className="text-sm text-moss">Beschreibung / Merkmale</label>
           <textarea
             value={form.description}
             onChange={(e) => setField("description", e.target.value)}
             placeholder="Neutrale Beschreibung, keine medizinischen Versprechen..."
-            className="mt-2 min-h-32 w-full rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+            className="mt-2 min-h-32 w-full rounded-xl border border-cream/10 bg-night p-4"
           />
         </div>
 
-        <button disabled={loading} className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 p-4 font-semibold disabled:opacity-50">
+        <button disabled={loading} className="flex items-center justify-center gap-2 rounded-xl bg-forest p-4 font-semibold disabled:opacity-50">
           <Save size={18} />
           {loading ? "Speichern..." : "Sorte speichern"}
         </button>
 
-        {message && <p className="rounded-xl bg-zinc-950 p-4 text-sm text-zinc-300">{message}</p>}
+        {message && <p className="rounded-xl bg-night p-4 text-sm text-haze">{message}</p>}
       </div>
     </form>
   );
@@ -170,12 +170,12 @@ function Input({
 }) {
   return (
     <div>
-      <label className="text-sm text-zinc-400">{label}</label>
+      <label className="text-sm text-moss">{label}</label>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="mt-2 w-full rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+        className="mt-2 w-full rounded-xl border border-cream/10 bg-night p-4"
       />
     </div>
   );
@@ -197,8 +197,8 @@ function Slider({
   return (
     <div>
       <div className="flex justify-between">
-        <label className="text-sm text-zinc-400">{label}</label>
-        <span className="font-bold text-emerald-400">{value}%</span>
+        <label className="text-sm text-moss">{label}</label>
+        <span className="font-bold text-gold">{value}%</span>
       </div>
       <input
         type="range"
@@ -207,7 +207,7 @@ function Slider({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="mt-3 w-full accent-emerald-500"
+        className="mt-3 w-full accent-gold"
       />
     </div>
   );

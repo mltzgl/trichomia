@@ -35,22 +35,22 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 px-5 py-10 text-white">
+    <main className="min-h-screen bg-night px-5 py-10 text-ivory">
       <div className="mx-auto max-w-md">
         <Logo />
 
-        <h1 className="mt-4 text-5xl font-black leading-tight">
+        <h1 className="mt-4 text-5xl font-bold leading-tight">
           Willkommen zurück.
         </h1>
 
-        <p className="mt-4 text-zinc-400">
+        <p className="mt-4 text-moss">
           Melde dich an, um Bewertungen zu speichern und dein Profil zu verwalten.
         </p>
 
-        <div className="mt-8 rounded-3xl border border-zinc-800 bg-zinc-900 p-5">
+        <div className="mt-8 rounded-3xl border border-cream/10 bg-panel p-5">
           <div className="grid gap-4">
             <input
-              className="rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+              className="rounded-xl border border-cream/10 bg-night p-4"
               placeholder="E-Mail"
               type="email"
               value={email}
@@ -58,7 +58,7 @@ export default function LoginPage() {
             />
 
             <input
-              className="rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+              className="rounded-xl border border-cream/10 bg-night p-4"
               placeholder="Passwort"
               type="password"
               value={password}
@@ -68,7 +68,7 @@ export default function LoginPage() {
             <button
               onClick={login}
               disabled={loading}
-              className="rounded-xl bg-emerald-600 p-4 font-semibold disabled:opacity-50"
+              className="rounded-xl bg-forest p-4 font-semibold disabled:opacity-50"
             >
               {loading ? "Einloggen..." : "Einloggen"}
             </button>
@@ -81,9 +81,9 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-sm text-zinc-400">
+        <p className="mt-6 text-center text-sm text-moss">
           Noch keinen Account?{" "}
-          <Link href="/register" className="text-emerald-400">
+          <Link href="/register" className="text-gold">
             Jetzt registrieren
           </Link>
         </p>

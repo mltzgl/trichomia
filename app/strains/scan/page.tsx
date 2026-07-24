@@ -138,22 +138,22 @@ export default function ScanPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 px-5 py-8 pb-28 text-white">
+    <main className="min-h-screen bg-night px-5 py-8 pb-28 text-ivory">
       <div className="mx-auto max-w-6xl">
-        <p className="font-semibold text-emerald-400">Trichomia Scan</p>
-        <h1 className="mt-4 text-5xl font-black">Etikett analysieren</h1>
+        <p className="font-semibold text-gold">Trichomia Scan</p>
+        <h1 className="mt-4 text-5xl font-bold">Etikett analysieren</h1>
 
-        <p className="mt-4 max-w-2xl text-zinc-400">
+        <p className="mt-4 max-w-2xl text-moss">
           Lade ein Etikett hoch. Du kannst optional den wichtigen Textbereich
           mit der Maus markieren, damit OCR schneller und genauer arbeitet.
         </p>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-[2rem] border border-zinc-800 bg-zinc-900 p-6">
-            <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-700 bg-zinc-950 p-8 text-center">
-              <Camera className="text-emerald-400" size={38} />
+          <div className="rounded-[2rem] border border-cream/10 bg-panel p-6">
+            <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-cream/20 bg-night p-8 text-center">
+              <Camera className="text-gold" size={38} />
               <span className="mt-4 text-lg font-bold">Foto auswählen</span>
-              <span className="mt-2 text-sm text-zinc-400">
+              <span className="mt-2 text-sm text-moss">
                 Etikett scharf, hell und möglichst gerade fotografieren.
               </span>
 
@@ -168,7 +168,7 @@ export default function ScanPage() {
             {preview && (
               <div className="mt-5">
                 <div className="mb-3 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2 text-sm text-zinc-400">
+                  <div className="flex items-center gap-2 text-sm text-moss">
                     <Crop size={16} />
                     Optional: Bereich markieren
                   </div>
@@ -176,7 +176,7 @@ export default function ScanPage() {
                   {selectedBox && (
                     <button
                       onClick={clearCrop}
-                      className="flex items-center gap-2 rounded-xl border border-zinc-700 px-3 py-2 text-sm text-zinc-300"
+                      className="flex items-center gap-2 rounded-xl border border-cream/20 px-3 py-2 text-sm text-haze"
                       type="button"
                     >
                       <RotateCcw size={15} />
@@ -186,7 +186,7 @@ export default function ScanPage() {
                 </div>
 
                 <div
-                  className="relative select-none overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950"
+                  className="relative select-none overflow-hidden rounded-2xl border border-cream/10 bg-night"
                   onMouseDown={startCrop}
                   onMouseMove={moveCrop}
                   onMouseUp={endCrop}
@@ -202,7 +202,7 @@ export default function ScanPage() {
 
                   {selectedBox && (
                     <div
-                      className="pointer-events-none absolute border-2 border-emerald-400 bg-emerald-400/20"
+                      className="pointer-events-none absolute border-2 border-gold bg-gold/20"
                       style={{
                         left: selectedBox.x,
                         top: selectedBox.y,
@@ -214,7 +214,7 @@ export default function ScanPage() {
                 </div>
 
                 {selectedBox && selectedBox.w > 20 && selectedBox.h > 20 && (
-                  <p className="mt-3 rounded-xl bg-emerald-900/30 p-3 text-sm text-emerald-200">
+                  <p className="mt-3 rounded-xl bg-forest/20 p-3 text-sm text-leaf-soft">
                     Bereich ausgewählt. Es wird nur dieser Ausschnitt analysiert.
                   </p>
                 )}
@@ -224,7 +224,7 @@ export default function ScanPage() {
             <button
               onClick={analyze}
               disabled={!file || loading}
-              className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 p-4 font-semibold disabled:opacity-50"
+              className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-forest p-4 font-semibold disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={18} />
@@ -239,8 +239,8 @@ export default function ScanPage() {
             </button>
           </div>
 
-          <div className="rounded-[2rem] border border-zinc-800 bg-zinc-900 p-6">
-            <h2 className="text-2xl font-black">Analyse-Schritte</h2>
+          <div className="rounded-[2rem] border border-cream/10 bg-panel p-6">
+            <h2 className="text-2xl font-bold">Analyse-Schritte</h2>
 
             <div className="mt-5 grid gap-3">
               {steps.map((step, index) => {
@@ -251,15 +251,15 @@ export default function ScanPage() {
                     key={step}
                     className={`flex items-center gap-3 rounded-xl border p-4 ${
                       done
-                        ? "border-emerald-700 bg-emerald-900/30"
-                        : "border-zinc-800 bg-zinc-950"
+                        ? "border-leaf/40 bg-forest/20"
+                        : "border-cream/10 bg-night"
                     }`}
                   >
                     <CheckCircle
                       size={20}
-                      className={done ? "text-emerald-400" : "text-zinc-600"}
+                      className={done ? "text-gold" : "text-moss/50"}
                     />
-                    <span className={done ? "text-white" : "text-zinc-400"}>
+                    <span className={done ? "text-ivory" : "text-moss"}>
                       {step}
                     </span>
                   </div>
@@ -276,48 +276,48 @@ export default function ScanPage() {
             {suggestion && !suggestion.error && (
               <section className="mt-6">
                 {suggestion?.parsed && (
-  <pre className="mt-4 text-xs bg-zinc-950 p-4 rounded">
+  <pre className="mt-4 text-xs bg-night p-4 rounded">
     PARSED:
     {JSON.stringify(suggestion.parsed, null, 2)}
   </pre>
 )}
 
 {suggestion?.bestMatch && (
-  <pre className="mt-4 text-xs bg-zinc-950 p-4 rounded">
+  <pre className="mt-4 text-xs bg-night p-4 rounded">
     DB MATCH:
     {JSON.stringify(suggestion.bestMatch, null, 2)}
   </pre>
 )}
                 {suggestion.qrUrl && (
-                  <div className="mb-5 rounded-xl border border-emerald-700 bg-emerald-900/30 p-4 text-sm">
-                    <div className="flex items-center gap-2 font-bold text-emerald-300">
+                  <div className="mb-5 rounded-xl border border-leaf/40 bg-forest/20 p-4 text-sm">
+                    <div className="flex items-center gap-2 font-bold text-leaf">
                       <QrCode size={18} />
                       QR-Code erkannt
                     </div>
-                    <p className="mt-2 break-all text-zinc-300">
+                    <p className="mt-2 break-all text-haze">
                       {suggestion.qrUrl}
                     </p>
                   </div>
                 )}
 
-                <div className="mb-5 rounded-xl border border-zinc-800 bg-zinc-950 p-4 text-sm text-zinc-400">
+                <div className="mb-5 rounded-xl border border-cream/10 bg-night p-4 text-sm text-moss">
                   Modus: {suggestion.mode || "kostenfreies OCR"} · Dauer:{" "}
                   {suggestion.durationMs
                     ? `${Math.round(suggestion.durationMs / 1000)}s`
                     : "k. A."}
                 </div>
 
-                <div className="rounded-[2rem] border border-zinc-800 bg-zinc-950 p-5">
+                <div className="rounded-[2rem] border border-cream/10 bg-night p-5">
                   <div className="mb-4 flex items-center gap-2">
-                    <Database className="text-emerald-400" size={20} />
-                    <h3 className="text-xl font-black">Vorschlag prüfen</h3>
+                    <Database className="text-gold" size={20} />
+                    <h3 className="text-xl font-bold">Vorschlag prüfen</h3>
                   </div>
 
                   <StrainForm initialData={suggestion} />
                 </div>
 
-                <details className="mt-5 rounded-xl bg-zinc-950 p-4 text-sm text-zinc-400">
-                  <summary className="cursor-pointer text-zinc-300">
+                <details className="mt-5 rounded-xl bg-night p-4 text-sm text-moss">
+                  <summary className="cursor-pointer text-haze">
                     Erkannter Rohtext
                   </summary>
                   <pre className="mt-4 whitespace-pre-wrap">

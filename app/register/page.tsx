@@ -36,22 +36,22 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 px-5 py-10 text-white">
+    <main className="min-h-screen bg-night px-5 py-10 text-ivory">
       <div className="mx-auto max-w-md">
         <Logo />
 
-        <h1 className="mt-4 text-5xl font-black leading-tight">
+        <h1 className="mt-4 text-5xl font-bold leading-tight">
           Account erstellen.
         </h1>
 
-        <p className="mt-4 text-zinc-400">
+        <p className="mt-4 text-moss">
           Zugang nur für volljährige Nutzer. Keine medizinische Beratung.
         </p>
 
-        <div className="mt-8 rounded-3xl border border-zinc-800 bg-zinc-900 p-5">
+        <div className="mt-8 rounded-3xl border border-cream/10 bg-panel p-5">
           <div className="grid gap-4">
             <input
-              className="rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+              className="rounded-xl border border-cream/10 bg-night p-4"
               placeholder="E-Mail"
               type="email"
               value={email}
@@ -59,14 +59,14 @@ export default function RegisterPage() {
             />
 
             <input
-              className="rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+              className="rounded-xl border border-cream/10 bg-night p-4"
               placeholder="Passwort, min. 8 Zeichen"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <label className="flex gap-3 rounded-xl border border-zinc-800 bg-zinc-950 p-4 text-sm text-zinc-300">
+            <label className="flex gap-3 rounded-xl border border-cream/10 bg-night p-4 text-sm text-haze">
               <input
                 type="checkbox"
                 checked={ageConfirmed}
@@ -78,7 +78,7 @@ export default function RegisterPage() {
             <button
               onClick={register}
               disabled={loading}
-              className="rounded-xl bg-emerald-600 p-4 font-semibold disabled:opacity-50"
+              className="rounded-xl bg-forest p-4 font-semibold disabled:opacity-50"
             >
               {loading ? "Account wird erstellt..." : "Registrieren"}
             </button>
@@ -91,9 +91,9 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-sm text-zinc-400">
+        <p className="mt-6 text-center text-sm text-moss">
           Schon registriert?{" "}
-          <Link href="/login" className="text-emerald-400">
+          <Link href="/login" className="text-gold">
             Einloggen
           </Link>
         </p>

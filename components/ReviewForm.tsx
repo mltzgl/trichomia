@@ -50,11 +50,11 @@ export default function ReviewForm({ strainId }: { strainId: number }) {
   return (
     <form
       onSubmit={save}
-      className="rounded-[2rem] border border-zinc-800 bg-zinc-900 p-6"
+      className="rounded-[2rem] border border-cream/10 bg-panel p-6"
     >
       <div className="flex items-center gap-3">
-        <Star className="text-emerald-400" size={24} />
-        <h2 className="text-2xl font-black">Sorte bewerten</h2>
+        <Star className="text-gold" size={24} />
+        <h2 className="text-2xl font-bold">Sorte bewerten</h2>
       </div>
 
       <div className="mt-6 grid gap-5">
@@ -68,19 +68,19 @@ export default function ReviewForm({ strainId }: { strainId: number }) {
           value={form.comment}
           onChange={(e) => setField("comment", e.target.value)}
           placeholder="Deine subjektive Erfahrung..."
-          className="min-h-32 rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+          className="min-h-32 rounded-xl border border-cream/10 bg-night p-4"
         />
 
         <button
           disabled={loading}
-          className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 p-4 font-semibold disabled:opacity-50"
+          className="flex items-center justify-center gap-2 rounded-xl bg-forest p-4 font-semibold disabled:opacity-50"
         >
           <Save size={18} />
           {loading ? "Speichern..." : "Bewertung speichern"}
         </button>
 
         {message && (
-          <p className="rounded-xl bg-zinc-950 p-4 text-sm text-zinc-300">
+          <p className="rounded-xl bg-night p-4 text-sm text-haze">
             {message}
           </p>
         )}
@@ -101,8 +101,8 @@ function Slider({
   return (
     <div>
       <div className="flex justify-between">
-        <label className="text-sm text-zinc-400">{label}</label>
-        <span className="font-bold text-emerald-400">{value}/10</span>
+        <label className="text-sm text-moss">{label}</label>
+        <span className="font-bold text-gold">{value}/10</span>
       </div>
       <input
         type="range"
@@ -111,7 +111,7 @@ function Slider({
         step="1"
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="mt-3 w-full accent-emerald-500"
+        className="mt-3 w-full accent-gold"
       />
     </div>
   );
