@@ -12,9 +12,18 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
+    const name = String(body.name || "").trim();
+
+    if (!name) {
+      return NextResponse.json(
+        { error: "Sortenname ist erforderlich." },
+        { status: 400 }
+      );
+    }
+
     const strain = await prisma.strain.create({
       data: {
-        name: body.name,
+        name,
         manufacturer: body.manufacturer || null,
         thc: body.thc || null,
         cbd: body.cbd || null,

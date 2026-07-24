@@ -11,8 +11,11 @@ type Props = {
 export default async function StrainDetailPage({ params }: Props) {
   const { id } = await params;
 
+  const numericId = Number(id);
+  if (!Number.isInteger(numericId) || numericId < 1) notFound();
+
   const strain = await prisma.strain.findUnique({
-  where: { id: Number(id) },
+  where: { id: numericId },
   include: {
     reviews: {
       orderBy: {

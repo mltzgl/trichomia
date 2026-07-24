@@ -60,6 +60,12 @@ export default function StrainForm({ initialData = {} }: { initialData?: any }) 
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!form.name.trim()) {
+      setMessage("Bitte gib einen Sortennamen an.");
+      return;
+    }
+
     setLoading(true);
     setMessage("");
 
