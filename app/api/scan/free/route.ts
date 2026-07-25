@@ -5,6 +5,11 @@ import sharp from "sharp";
 import jsQR from "jsqr";
 import Fuse from "fuse.js";
 import { prisma } from "@/lib/prisma";
+import {
+  strainCatalog,
+  knownManufacturers,
+  type CatalogStrain,
+} from "@/data/strainCatalog";
 
 type ScanBox = {
   x: number;
@@ -68,8 +73,88 @@ function normalizeText(text: string) {
   return text
     .replace(/\s+/g, " ")
     .replace(/TCH/gi, "THC")
+    .replace(/T\s?H\s?C/gi, "THC")
     .replace(/C8D/gi, "CBD")
+    .replace(/CB0/gi, "CBD")
+    .replace(/C\s?B\s?D/gi, "CBD")
     .trim();
+}
+
+function findCatalogSuggestions(ocrText: string, parsedName: string) {
+  const fuse = new Fuse(strainCatalog, {
+    keys: [
+      { name: "name", weight: 0.6 },
+      { name: "aliases", weight: 0.3 },
+      { name: "manufacturer", weight: 0.1 },
+    ],
+    threshold: 0.38,
+    ignoreLocation: true,
+    includeScore: true,
+  });
+
+  const queries = ocrText
+    .split(/\r?\n/)
+    .map((line) => normalizeText(line))
+    .filter(
+      (line) =>
+        line.length >= 3 &&
+        line.length <= 60 &&
+        !/^[\d\s.,:%/-]+$/.test(line) &&
+        !/Hergestellt|Verwendbar|Charge|Anwendung|Gebrauch|Inhalt|Apotheke|Lagerung/i.test(
+          line
+        )
+    );
+
+  if (parsedName) queries.push(parsedName);
+
+  // Der nackte Zahlencode (z. B. "22/1") ist wenig spezifisch – er dient nur
+  // als Auffangnetz und bekommt deshalb einen Score-Malus.
+  const weightedQueries = queries.map((query) => ({ query, penalty: 0 }));
+  const ratio = normalizeText(ocrText).match(/\b(\d{1,2})\s*\/\s*(\d{1,2})\b/);
+  if (ratio) {
+    weightedQueries.push({ query: `${ratio[1]}/${ratio[2]}`, penalty: 0.25 });
+  }
+
+  const lowerText = normalizeText(ocrText).toLowerCase();
+
+  const bestByStrain = new Map<
+    string,
+    { item: CatalogStrain; score: number }
+  >();
+
+  for (const { query, penalty } of weightedQueries) {
+    for (const result of fuse.search(query)) {
+      const key = `${result.item.name}|${result.item.manufacturer}`;
+      const score = (result.score ?? 1) + penalty;
+      const existing = bestByStrain.get(key);
+
+      if (!existing || score < existing.score) {
+        bestByStrain.set(key, { item: result.item, score });
+      }
+    }
+  }
+
+  // Bonus, wenn der Hersteller wörtlich auf dem Etikett steht.
+  for (const entry of bestByStrain.values()) {
+    if (
+      entry.item.manufacturer &&
+      lowerText.includes(entry.item.manufacturer.toLowerCase())
+    ) {
+      entry.score = Math.max(0, entry.score - 0.3);
+    }
+  }
+
+  return Array.from(bestByStrain.values())
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 5)
+    .map(({ item, score }) => ({
+      name: item.name,
+      manufacturer: item.manufacturer,
+      thc: item.thc,
+      cbd: item.cbd,
+      genetics: item.genetics,
+      score: Math.round((1 - score) * 100),
+    }));
 }
 
 function parseText(text: string) {
@@ -79,8 +164,12 @@ function parseText(text: string) {
     .map((l) => normalizeText(l))
     .filter(Boolean);
 
-  const thcMatch = clean.match(/THC[:\s]*([<>\d.,]+)\s*%/i);
-  const cbdMatch = clean.match(/CBD[:\s]*([<>\d.,]+)\s*%/i);
+  const thcMatch =
+    clean.match(/(?:Gesamt-?)?THC(?:-Gehalt)?[:\s]*([<>\d.,]+)\s*%/i) ||
+    clean.match(/([<>\d.,]+)\s*%\s*THC/i);
+  const cbdMatch =
+    clean.match(/(?:Gesamt-?)?CBD(?:-Gehalt)?[:\s]*([<>\d.,]+)\s*%/i) ||
+    clean.match(/([<>\d.,]+)\s*%\s*CBD/i);
 
   const ratioIndex = lines.findIndex((line) => /\b\d{2}\s*\/\s*\d\b/.test(line));
 
@@ -96,27 +185,15 @@ function parseText(text: string) {
     manufacturer = beforeRatio.split(" ")[0] || "";
 
     const nextLine = lines[ratioIndex + 1] || "";
-    const badLine = /THC|CBD|Hergestellt|Verwendbar|Defektur|Charge|Anwendung|Gebrauch|INHALT|Gramm/i.test(nextLine);
+    const badLine =
+      /THC|CBD|Hergestellt|Verwendbar|Defektur|Charge|Anwendung|Gebrauch|INHALT|Gramm|Cannabisbl|Bl.?ten|Cannabis flos|Apotheke/i.test(
+        nextLine
+      );
 
     if (nextLine && !badLine) {
       name = nextLine;
     }
   }
-
-  const knownManufacturers = [
-    "remexian",
-    "Big Dreams",
-    "Sibanax",
-    "HUALA",
-    "Demecan",
-    "Cannamedical",
-    "Avaay",
-    "Bedrocan",
-    "Tilray",
-    "Enua",
-    "IMC",
-    "Aurora",
-  ];
 
   if (!manufacturer) {
     manufacturer =
@@ -125,21 +202,25 @@ function parseText(text: string) {
       ) || "";
   }
 
-  const knownStrains = [
-    "Gelonade",
-    "Pink Kush",
-    "Alien Mints",
-    "GMO Zkittlez",
-    "Zkittlez",
-    "Gorilla Glue",
-    "Royal Gorilla",
-  ];
-
   if (!name) {
-    name =
-      knownStrains.find((strain) =>
-        clean.toLowerCase().includes(strain.toLowerCase())
-      ) || "";
+    const lowerClean = clean.toLowerCase();
+    const isRatioCode = (value: string) => /^\d{1,2}\/\d{1,2}$/.test(value);
+
+    // Zuerst volle Katalognamen, dann aussagekräftige Aliasse –
+    // generische Zahlencodes wie "22/1" zählen hier nicht.
+    const catalogHit =
+      strainCatalog.find((strain) =>
+        lowerClean.includes(strain.name.toLowerCase())
+      ) ||
+      strainCatalog.find((strain) =>
+        strain.aliases?.some(
+          (alias) =>
+            !isRatioCode(alias) &&
+            alias.length >= 3 &&
+            lowerClean.includes(alias.toLowerCase())
+        )
+      );
+    name = catalogHit?.name || "";
   }
 
   return {
@@ -200,12 +281,14 @@ export async function POST(req: Request) {
       }
     }
 
+    // Sanfte Aufbereitung statt harter Binarisierung: erhält Text auf
+    // farbigen und kontrastarmen Etiketten deutlich besser.
     const imageForOcr = await sharp(scanBuffer)
       .rotate()
-      .resize({ width: 1000, withoutEnlargement: true })
+      .resize({ width: 1400, withoutEnlargement: true })
       .grayscale()
-      .linear(1.5, -20)
-      .threshold(120)
+      .normalize()
+      .median(1)
       .sharpen()
       .png()
       .toBuffer();
@@ -221,17 +304,41 @@ export async function POST(req: Request) {
       corePath: path.join(process.cwd(), "node_modules/tesseract.js-core"),
     });
 
+    // Zwei Durchläufe: Blocktext und verstreuter Text – Etiketten haben oft
+    // beides. Das Ergebnis mit der höheren Konfidenz gewinnt.
     await worker.setParameters({
       tessedit_pageseg_mode: PSM.SINGLE_BLOCK,
     });
+    const blockResult = await timeout(worker.recognize(imageForOcr), 25000);
 
-    const result = await timeout(worker.recognize(imageForOcr), 30000);
+    await worker.setParameters({
+      tessedit_pageseg_mode: PSM.SPARSE_TEXT,
+    });
+    let sparseResult: typeof blockResult | null = null;
+    try {
+      sparseResult = await timeout(worker.recognize(imageForOcr), 25000);
+    } catch (error) {
+      console.error("SPARSE OCR SKIPPED:", error);
+    }
 
-    console.log("OCR DONE");
+    const result =
+      sparseResult &&
+      sparseResult.data.confidence > blockResult.data.confidence &&
+      (sparseResult.data.text || "").trim().length >=
+        (blockResult.data.text || "").trim().length * 0.5
+        ? sparseResult
+        : blockResult;
+
+    console.log(
+      "OCR DONE",
+      "block:", blockResult.data.confidence,
+      "sparse:", sparseResult?.data.confidence ?? "-"
+    );
 
     const extractedText = result.data.text || "";
     const parsed = parseText(extractedText);
     const bestMatch = await findBestDbMatch(extractedText);
+    const suggestions = findCatalogSuggestions(extractedText, parsed.name);
 
     await worker.terminate();
     worker = null;
@@ -243,9 +350,16 @@ export async function POST(req: Request) {
       cbd: parsed.cbd || bestMatch?.cbd || "",
     };
 
+    const topSuggestion = suggestions[0];
+
     return NextResponse.json({
       ...finalData,
-      genetics: bestMatch?.genetics || "",
+      name: finalData.name || topSuggestion?.name || "",
+      manufacturer: finalData.manufacturer || topSuggestion?.manufacturer || "",
+      thc: finalData.thc || topSuggestion?.thc || "",
+      cbd: finalData.cbd || topSuggestion?.cbd || "",
+      suggestions,
+      genetics: bestMatch?.genetics || topSuggestion?.genetics || "",
       terpenes: bestMatch?.terpenes || "",
       description: parsed.productLine
         ? `Produktzeile: ${parsed.productLine}`

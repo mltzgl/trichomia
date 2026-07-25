@@ -10,6 +10,7 @@ import {
   Database,
   Crop,
   RotateCcw,
+  Sparkles,
 } from "lucide-react";
 import StrainForm from "@/components/StrainForm";
 
@@ -33,6 +34,7 @@ export default function ScanPage() {
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [suggestion, setSuggestion] = useState<any>(null);
+  const [chosen, setChosen] = useState<any>(null);
   const [activeStep, setActiveStep] = useState(0);
 
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(
@@ -93,6 +95,7 @@ export default function ScanPage() {
 
     setLoading(true);
     setSuggestion(null);
+    setChosen(null);
     setActiveStep(2);
 
     const formData = new FormData();
@@ -275,19 +278,6 @@ export default function ScanPage() {
 
             {suggestion && !suggestion.error && (
               <section className="mt-6">
-                {suggestion?.parsed && (
-  <pre className="mt-4 text-xs bg-night p-4 rounded">
-    PARSED:
-    {JSON.stringify(suggestion.parsed, null, 2)}
-  </pre>
-)}
-
-{suggestion?.bestMatch && (
-  <pre className="mt-4 text-xs bg-night p-4 rounded">
-    DB MATCH:
-    {JSON.stringify(suggestion.bestMatch, null, 2)}
-  </pre>
-)}
                 {suggestion.qrUrl && (
                   <div className="mb-5 rounded-xl border border-leaf/40 bg-forest/20 p-4 text-sm">
                     <div className="flex items-center gap-2 font-bold text-leaf">
@@ -307,13 +297,92 @@ export default function ScanPage() {
                     : "k. A."}
                 </div>
 
+                {suggestion.matchedStrainId && (
+                  <div className="mb-5 rounded-xl border border-leaf/40 bg-forest/20 p-4 text-sm">
+                    <p className="font-bold text-leaf">
+                      Diese Sorte gibt es schon bei Trichomia
+                    </p>
+                    <p className="mt-1 text-haze">
+                      „{suggestion.bestMatch?.name}“ wurde in der Datenbank
+                      gefunden – du kannst sie direkt bewerten statt sie neu
+                      anzulegen.
+                    </p>
+                    <a
+                      href={`/strains/${suggestion.matchedStrainId}`}
+                      className="mt-3 inline-flex rounded-full bg-forest px-4 py-2 text-sm font-semibold text-ivory"
+                    >
+                      Zur Sorte
+                    </a>
+                  </div>
+                )}
+
+                {Array.isArray(suggestion.suggestions) &&
+                  suggestion.suggestions.length > 0 && (
+                    <div className="mb-5 rounded-xl border border-gold/30 bg-night p-4">
+                      <div className="flex items-center gap-2 font-bold text-gold">
+                        <Sparkles size={18} />
+                        Ähnliche Sorten aus dem Katalog
+                      </div>
+                      <p className="mt-1 text-xs text-moss">
+                        Antippen übernimmt Name, Hersteller und typische Werte
+                        ins Formular – bitte vor dem Speichern mit dem Etikett
+                        abgleichen.
+                      </p>
+
+                      <div className="mt-3 grid gap-2">
+                        {suggestion.suggestions.map((item: any) => {
+                          const active =
+                            chosen &&
+                            chosen.name === item.name &&
+                            chosen.manufacturer === item.manufacturer;
+
+                          return (
+                            <button
+                              key={`${item.name}|${item.manufacturer}`}
+                              type="button"
+                              onClick={() => setChosen(item)}
+                              className={`flex flex-wrap items-center justify-between gap-2 rounded-xl border p-3 text-left text-sm transition ${
+                                active
+                                  ? "border-gold bg-gold/15"
+                                  : "border-cream/10 bg-panel hover:border-gold/50"
+                              }`}
+                            >
+                              <span>
+                                <span className="font-semibold text-ivory">
+                                  {item.name}
+                                </span>
+                                {item.manufacturer && (
+                                  <span className="text-moss">
+                                    {" "}
+                                    · {item.manufacturer}
+                                  </span>
+                                )}
+                              </span>
+                              <span className="text-xs text-moss">
+                                THC {item.thc} · CBD {item.cbd}
+                                {item.genetics ? ` · ${item.genetics}` : ""}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
                 <div className="rounded-[2rem] border border-cream/10 bg-night p-5">
                   <div className="mb-4 flex items-center gap-2">
                     <Database className="text-gold" size={20} />
                     <h3 className="text-xl font-bold">Vorschlag prüfen</h3>
                   </div>
 
-                  <StrainForm initialData={suggestion} />
+                  <StrainForm
+                    key={
+                      chosen
+                        ? `${chosen.name}|${chosen.manufacturer}`
+                        : "ocr-result"
+                    }
+                    initialData={chosen ? { ...suggestion, ...chosen } : suggestion}
+                  />
                 </div>
 
                 <details className="mt-5 rounded-xl bg-night p-4 text-sm text-moss">
