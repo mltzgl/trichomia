@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Sprout, Star, MessageCircle, User } from "lucide-react";
+import { Home, Sprout, Star, MessageCircle, BookOpen, User } from "lucide-react";
 
 const navItems = [
   {
@@ -26,6 +26,11 @@ const navItems = [
     icon: MessageCircle,
   },
   {
+    href: "/wissen",
+    label: "Wissen",
+    icon: BookOpen,
+  },
+  {
     href: "/account",
     label: "Profil",
     icon: User,
@@ -37,7 +42,7 @@ export default function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-cream/10 bg-night/90 px-3 py-2 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-md items-center justify-between rounded-2xl border border-cream/10 bg-panel/80 px-2 py-2 shadow-2xl">
+      <div className="mx-auto flex max-w-lg items-center justify-between rounded-2xl border border-cream/10 bg-panel/80 px-2 py-2 shadow-2xl">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active =

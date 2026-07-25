@@ -13,6 +13,7 @@ export default async function ReviewPage() {
 
   return (
     <main className="min-h-screen bg-night text-ivory px-5 py-6 pb-24">
+      <div className="mx-auto max-w-7xl">
       <h1 className="text-3xl font-bold">Erfahrung teilen</h1>
       <p className="text-moss mt-2">
         Wähle die Sorte aus, die du bewerten möchtest. Bitte keine
@@ -58,6 +59,7 @@ export default async function ReviewPage() {
           </div>
         )}
       </section>
+      </div>
 
       <BottomNav />
     </main>

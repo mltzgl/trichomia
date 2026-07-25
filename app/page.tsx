@@ -80,7 +80,7 @@ export default function Home() {
     <main className="min-h-screen bg-night text-ivory pb-24">
       {/* Hero */}
       <section className="px-5 pt-8 pb-10">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-7xl">
           <Logo />
 
           <div className="mt-10 grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
@@ -145,7 +145,7 @@ export default function Home() {
 
       {/* Vier Säulen */}
       <section className="px-5 py-6">
-        <div className="mx-auto max-w-6xl rounded-[28px] border border-cream/10 bg-panel p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+        <div className="mx-auto max-w-7xl rounded-[28px] border border-cream/10 bg-panel p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-bold uppercase tracking-[0.22em] text-gold">
               Was Trichomia kann
@@ -178,7 +178,7 @@ export default function Home() {
 
       {/* Foto-Karten */}
       <section className="px-5 py-6">
-        <div className="mx-auto grid max-w-6xl gap-5">
+        <div className="mx-auto grid max-w-7xl gap-5">
           {sections.map((item) => (
             <Link
               key={item.title}
@@ -214,9 +214,65 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Wissen */}
+      <section className="px-5 py-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-bold uppercase tracking-[0.22em] text-gold">
+              Wissen
+            </p>
+            <h2 className="mt-3 text-4xl font-bold">Verstehen, was du nutzt</h2>
+            <p className="mt-3 text-moss">
+              Kurze, fundierte Grundlagen ohne Mythen und Marketing – hier ein
+              Einstieg.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {[
+              {
+                tag: "Grundlagen",
+                title: "Cannabinoide: THC, CBD & Co.",
+                text: "Was die Wirkstoffe unterscheidet und warum der THC-Wert allein wenig aussagt.",
+                href: "/wissen#cannabinoide",
+              },
+              {
+                tag: "Grundlagen",
+                title: "Terpene: Warum Sorten so unterschiedlich wirken",
+                text: "Myrcen, Limonen, Caryophyllen – was hinter den Aromen steckt.",
+                href: "/wissen#terpene",
+              },
+              {
+                tag: "Recht",
+                title: "Cannabis in Deutschland: Die aktuelle Rechtslage",
+                text: "Besitz, Eigenanbau, Anbauvereinigungen und Straßenverkehr – verständlich zusammengefasst.",
+                href: "/wissen#rechtslage",
+              },
+            ].map((card) => (
+              <Link
+                key={card.title}
+                href={card.href}
+                className="group flex flex-col rounded-[2rem] bg-cream p-6 shadow-[0_16px_44px_rgba(0,0,0,0.4)] transition hover:-translate-y-1"
+              >
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-gold">
+                  {card.tag}
+                </p>
+                <h3 className="mt-2 text-xl font-bold text-forest-deep">
+                  {card.title}
+                </h3>
+                <p className="mt-2 flex-1 text-sm text-[#5c6b5e]">{card.text}</p>
+                <p className="mt-4 text-sm font-semibold text-forest group-hover:underline">
+                  Weiterlesen →
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Drei Schritte */}
       <section className="px-5 py-6">
-        <div className="mx-auto max-w-6xl rounded-[28px] bg-gradient-to-br from-gold-hot via-gold to-[#d08f2c] p-8 md:p-12 shadow-[0_24px_70px_rgba(223,161,60,0.22)]">
+        <div className="mx-auto max-w-7xl rounded-[28px] bg-gradient-to-br from-gold-hot via-gold to-[#d08f2c] p-8 md:p-12 shadow-[0_24px_70px_rgba(223,161,60,0.22)]">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-bold uppercase tracking-[0.22em] text-forest-deep/80">
               So funktioniert&rsquo;s
@@ -244,7 +300,7 @@ export default function Home() {
 
       {/* Vertrauen */}
       <section className="px-5 py-6">
-        <div className="mx-auto max-w-6xl rounded-[2rem] border border-cream/10 bg-panel p-6 md:p-8">
+        <div className="mx-auto max-w-7xl rounded-[2rem] border border-cream/10 bg-panel p-6 md:p-8">
           <h2 className="text-3xl font-bold">
             Seriös. Community-basiert. Rechtlich bewusst.
           </h2>

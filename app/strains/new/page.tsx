@@ -6,7 +6,7 @@ import Logo from "@/components/Logo";
 export default function NewStrainPage() {
   return (
     <main className="min-h-screen bg-night px-5 py-8 pb-28 text-ivory">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         <Logo />
         <h1 className="mt-4 text-5xl font-bold">Sorte erfassen</h1>
         <p className="mt-4 max-w-2xl text-moss">

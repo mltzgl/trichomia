@@ -22,7 +22,7 @@ export default async function AccountPage() {
 
   return (
     <main className="min-h-screen bg-night px-5 py-8 pb-28 text-ivory">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <Logo />
 
         <section className="mt-5 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">

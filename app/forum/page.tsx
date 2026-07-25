@@ -3,6 +3,7 @@ import BottomNav from "@/components/BottomNav";
 export default function ForumPage() {
   return (
     <main className="min-h-screen bg-night text-ivory px-5 py-6 pb-24">
+      <div className="mx-auto max-w-7xl">
       <h1 className="text-3xl font-bold">Forum</h1>
       <p className="text-moss mt-2">
         Community-Austausch im legalen Rahmen.
@@ -23,6 +24,7 @@ export default function ForumPage() {
           </p>
         </article>
       </section>
+      </div>
 
       <BottomNav />
     </main>

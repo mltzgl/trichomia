@@ -13,7 +13,7 @@ export default async function StrainsPage() {
 
   return (
     <main className="min-h-screen bg-night px-5 py-8 pb-28 text-ivory">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
             <p className="font-semibold text-gold">Sorten-Datenbank</p>
