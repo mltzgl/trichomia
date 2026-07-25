@@ -32,6 +32,38 @@ export async function POST(request: Request) {
       );
     }
 
+    const birthDateRaw = String(body.birthDate || "");
+    const birthDate = new Date(birthDateRaw);
+
+    if (!birthDateRaw || isNaN(birthDate.getTime())) {
+      return NextResponse.json(
+        { error: "Bitte gib ein gültiges Geburtsdatum an." },
+        { status: 400 }
+      );
+    }
+
+    const now = new Date();
+    let age = now.getFullYear() - birthDate.getFullYear();
+    const beforeBirthday =
+      now.getMonth() < birthDate.getMonth() ||
+      (now.getMonth() === birthDate.getMonth() &&
+        now.getDate() < birthDate.getDate());
+    if (beforeBirthday) age -= 1;
+
+    if (age < 18) {
+      return NextResponse.json(
+        { error: "Du musst mindestens 18 Jahre alt sein." },
+        { status: 400 }
+      );
+    }
+
+    if (age > 120) {
+      return NextResponse.json(
+        { error: "Bitte gib ein gültiges Geburtsdatum an." },
+        { status: 400 }
+      );
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -50,6 +82,7 @@ export async function POST(request: Request) {
         email,
         passwordHash,
         ageConfirmed,
+        birthDate,
       },
     });
 

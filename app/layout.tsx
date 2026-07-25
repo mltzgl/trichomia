@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Lora, Poppins } from "next/font/google";
+import AgeGate from "@/components/AgeGate";
 import "./globals.css";
 
 const lora = Lora({
@@ -30,7 +31,10 @@ export default function RootLayout({
       lang="de"
       className={`${lora.variable} ${poppins.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AgeGate />
+        {children}
+      </body>
     </html>
   );
 }

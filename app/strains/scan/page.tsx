@@ -142,7 +142,7 @@ export default function ScanPage() {
 
   return (
     <main className="min-h-screen bg-night px-5 py-8 pb-28 text-ivory">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1600px]">
         <p className="font-semibold text-gold">Trichomia Scan</p>
         <h1 className="mt-4 text-5xl font-bold">Etikett analysieren</h1>
 

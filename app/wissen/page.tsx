@@ -108,7 +108,7 @@ const saferUse = [
 export default function WissenPage() {
   return (
     <main className="min-h-screen bg-night px-5 py-8 pb-28 text-ivory">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1600px]">
         <Logo />
 
         <div className="mt-8 max-w-3xl">

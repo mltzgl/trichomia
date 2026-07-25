@@ -22,21 +22,21 @@ export default async function AccountPage() {
 
   return (
     <main className="min-h-screen bg-night px-5 py-8 pb-28 text-ivory">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1600px]">
         <Logo />
 
         <section className="mt-5 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="rounded-[2rem] border border-leaf/30 bg-gradient-to-br from-forest-deep/70 to-panel p-8">
-            <div className="flex items-center gap-5">
-              <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-forest">
-                <User size={38} />
+          <div className="rounded-[2rem] border border-leaf/30 bg-gradient-to-br from-forest-deep/70 to-panel p-5 md:p-8">
+            <div className="flex items-center gap-4 md:gap-5">
+              <div className="flex h-14 w-14 flex-none items-center justify-center rounded-2xl bg-forest md:h-20 md:w-20 md:rounded-3xl">
+                <User className="h-6 w-6 md:h-9 md:w-9" />
               </div>
 
-              <div>
-                <h1 className="text-4xl font-bold">
+              <div className="min-w-0">
+                <h1 className="break-words text-2xl font-bold md:text-4xl">
                   {user.displayName || user.username || "Mein Account"}
                 </h1>
-                <p className="mt-1 text-sm text-haze">{user.email}</p>
+                <p className="mt-1 break-all text-sm text-haze">{user.email}</p>
                 {user.location && (
                   <p className="mt-2 text-sm text-leaf">{user.location}</p>
                 )}
@@ -49,24 +49,24 @@ export default async function AccountPage() {
               </p>
             )}
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:mt-8">
               <Link
                 href="/review"
-                className="rounded-xl bg-forest px-5 py-3 font-semibold"
+                className="rounded-full bg-gold px-5 py-3 text-center font-semibold text-forest-deep transition hover:bg-gold-hot"
               >
                 Bewertung starten
               </Link>
 
               <Link
                 href="/strains"
-                className="rounded-xl border border-cream/20 px-5 py-3 font-semibold"
+                className="rounded-full border border-cream/30 px-5 py-3 text-center font-semibold"
               >
                 Sorten ansehen
               </Link>
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+          <div className="grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-4">
             <StatCard icon={<Star size={24} />} value={user.reviews.length} label="Bewertungen" />
             <StatCard icon={<Sprout size={24} />} value={0} label="Favoriten" />
             <StatCard icon={<MessageCircle size={24} />} value={0} label="Beiträge" />
@@ -78,7 +78,7 @@ export default async function AccountPage() {
             href="/review"
             className="rounded-[2rem] border border-leaf/40 bg-forest/25 p-6 lg:col-span-2"
           >
-            <h2 className="text-3xl font-bold">Sorte bewerten</h2>
+            <h2 className="text-2xl font-bold md:text-3xl">Sorte bewerten</h2>
             <p className="mt-3 max-w-xl text-haze">
               Teile deine Erfahrung zu Wirkung, Geschmack und Verträglichkeit.
             </p>
@@ -132,10 +132,10 @@ function StatCard({
   label: string;
 }) {
   return (
-    <div className="rounded-[2rem] border border-cream/10 bg-panel p-6">
+    <div className="rounded-2xl border border-cream/10 bg-panel p-4 md:rounded-[2rem] md:p-6">
       <div className="text-gold">{icon}</div>
-      <p className="mt-4 text-4xl font-bold">{value}</p>
-      <p className="mt-1 text-sm text-moss">{label}</p>
+      <p className="mt-2 text-2xl font-bold md:mt-4 md:text-4xl">{value}</p>
+      <p className="mt-1 text-xs text-moss md:text-sm">{label}</p>
     </div>
   );
 }

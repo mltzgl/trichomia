@@ -80,7 +80,7 @@ export default function Home() {
     <main className="min-h-screen bg-night text-ivory pb-24">
       {/* Hero */}
       <section className="px-5 pt-8 pb-10">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-[1600px]">
           <Logo />
 
           <div className="mt-10 grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
@@ -145,7 +145,7 @@ export default function Home() {
 
       {/* Vier Säulen */}
       <section className="px-5 py-6">
-        <div className="mx-auto max-w-7xl rounded-[28px] border border-cream/10 bg-panel p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+        <div className="mx-auto max-w-[1600px] rounded-[28px] border border-cream/10 bg-panel p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-bold uppercase tracking-[0.22em] text-gold">
               Was Trichomia kann
@@ -178,7 +178,7 @@ export default function Home() {
 
       {/* Foto-Karten */}
       <section className="px-5 py-6">
-        <div className="mx-auto grid max-w-7xl gap-5">
+        <div className="mx-auto grid max-w-[1600px] gap-5">
           {sections.map((item) => (
             <Link
               key={item.title}
@@ -216,7 +216,7 @@ export default function Home() {
 
       {/* Wissen */}
       <section className="px-5 py-6">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-[1600px]">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-bold uppercase tracking-[0.22em] text-gold">
               Wissen
@@ -272,7 +272,7 @@ export default function Home() {
 
       {/* Drei Schritte */}
       <section className="px-5 py-6">
-        <div className="mx-auto max-w-7xl rounded-[28px] bg-gradient-to-br from-gold-hot via-gold to-[#d08f2c] p-8 md:p-12 shadow-[0_24px_70px_rgba(223,161,60,0.22)]">
+        <div className="mx-auto max-w-[1600px] rounded-[28px] bg-gradient-to-br from-gold-hot via-gold to-[#d08f2c] p-8 md:p-12 shadow-[0_24px_70px_rgba(223,161,60,0.22)]">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-bold uppercase tracking-[0.22em] text-forest-deep/80">
               So funktioniert&rsquo;s
@@ -300,7 +300,7 @@ export default function Home() {
 
       {/* Vertrauen */}
       <section className="px-5 py-6">
-        <div className="mx-auto max-w-7xl rounded-[2rem] border border-cream/10 bg-panel p-6 md:p-8">
+        <div className="mx-auto max-w-[1600px] rounded-[2rem] border border-cream/10 bg-panel p-6 md:p-8">
           <h2 className="text-3xl font-bold">
             Seriös. Community-basiert. Rechtlich bewusst.
           </h2>

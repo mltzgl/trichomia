@@ -29,7 +29,7 @@ export default async function StrainDetailPage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-night px-5 py-8 pb-28 text-ivory">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[1400px]">
         <Link href="/strains" className="text-sm text-gold">
           ← Zurück
         </Link>

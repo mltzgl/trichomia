@@ -9,18 +9,39 @@ export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [ageConfirmed, setAgeConfirmed] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function register() {
+    if (!birthDate) {
+      setMessage("Bitte gib dein Geburtsdatum an.");
+      return;
+    }
+
+    const birth = new Date(birthDate);
+    const now = new Date();
+    let age = now.getFullYear() - birth.getFullYear();
+    const beforeBirthday =
+      now.getMonth() < birth.getMonth() ||
+      (now.getMonth() === birth.getMonth() && now.getDate() < birth.getDate());
+    if (beforeBirthday) age -= 1;
+
+    if (age < 18) {
+      setMessage(
+        "Du musst mindestens 18 Jahre alt sein, um Trichomia zu nutzen."
+      );
+      return;
+    }
+
     setLoading(true);
     setMessage("");
 
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, ageConfirmed }),
+      body: JSON.stringify({ email, password, birthDate, ageConfirmed }),
     });
 
     const data = await res.json();
@@ -66,13 +87,25 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
+            <label className="grid gap-2 rounded-xl border border-cream/10 bg-night p-4 text-sm text-haze">
+              Geburtsdatum (nur für die Altersprüfung)
+              <input
+                type="date"
+                value={birthDate}
+                max={new Date().toISOString().split("T")[0]}
+                onChange={(e) => setBirthDate(e.target.value)}
+                className="rounded-lg border border-cream/10 bg-panel p-3 text-ivory [color-scheme:dark]"
+              />
+            </label>
+
             <label className="flex gap-3 rounded-xl border border-cream/10 bg-night p-4 text-sm text-haze">
               <input
                 type="checkbox"
                 checked={ageConfirmed}
                 onChange={(e) => setAgeConfirmed(e.target.checked)}
               />
-              Ich bestätige, dass ich mindestens 18 Jahre alt bin.
+              Ich bestätige, dass ich mindestens 18 Jahre alt bin und meine
+              Angaben korrekt sind.
             </label>
 
             <button
